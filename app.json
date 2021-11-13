@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "sibi-sign-language-react-native",
+    "slug": "sibi-sign-language-react-native",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "sibi-sign-language-react-native"
+}

@@ -13,10 +13,11 @@ const RecognizerPage = () => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [recording, setRecording] = useState(false);
   const [recognizedText, setRecognizedText] = useState('');
+  const [imageUri, setImageUri] = useState('');
 
   const cameraRef = useRef(null);
 
-  const service = 'http://3c77-35-231-168-237.ngrok.io/';
+  const service = 'http://3ff1-35-196-215-233.ngrok.io/';
 
   useEffect(() => {
     (async () => {
@@ -26,26 +27,47 @@ const RecognizerPage = () => {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if(recording === true){
-        const photo = await cameraRef.current.takePictureAsync({quality: 0.5, exif: false});
-
-        // let formData = new FormData();
-        // formData.append("image", photo.base64); 
-        // formData.append("type", "base64");
-
-        let formData = new FormData();
-        formData.append('file', { uri: photo.uri, name: 'image.jpg', type: 'image/jpg'})
-
-        setInterval(async () => {
-          const result = await axios.post(`${service}predict`, formData) //do API call here
-          console.log(result.data)
-          console.log(formData)
-        }, 5000);
+    const interval = setInterval(async () => {
+      if (!!!recording) {
+        console.log('==============');
+        console.log('recording is off');
+        return;
       }
-    }
-    fetchData();
+      const photo = await cameraRef.current.takePictureAsync({quality: 0.5, exif: false});
+      setImageUri(photo.uri);
+
+      let formData = new FormData();
+      formData.append('file', {
+        uri: photo.uri,
+        name: 'image.jpg',
+        type: 'image/jpg'
+      });
+
+      const result = await axios.post(`${service}predict`, formData); //do API call here
+      console.log('==============')
+      console.log('prediction result:', result.data);
+      console.log(photo.uri);
+    }, 5000);
+    return () => clearInterval(interval);
   }, [recording]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if(recording === true){
+  //       const photo = await cameraRef.current.takePictureAsync({quality: 0.5, exif: false});
+
+  //       let formData = new FormData();
+  //       formData.append('file', { uri: photo.uri, name: 'image.jpg', type: 'image/jpg'})
+
+  //       setInterval(async () => {
+  //         const result = await axios.post(`${service}predict`, formData) //do API call here
+  //         console.log(result.data)
+  //         console.log(formData)
+  //       }, 5000);
+  //     }
+  //   }
+  //   fetchData();
+  // }, [recording]);
 
 
 

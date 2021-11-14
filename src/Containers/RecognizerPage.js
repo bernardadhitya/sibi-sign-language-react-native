@@ -6,6 +6,7 @@ import { useFonts } from '@use-expo/font';
 import { ScrollView } from 'react-native';
 import { Camera } from 'expo-camera';
 import axios from 'axios';
+import IconFlip from '../Assets/icons/IconFlip';
 
 const RecognizerPage = () => {
   let [fontsLoaded] = useFonts(Fonts);
@@ -16,7 +17,7 @@ const RecognizerPage = () => {
 
   const cameraRef = useRef(null);
 
-  const service = 'http://df84-35-188-243-114.ngrok.io/';
+  const service = 'http://2cfc-35-188-243-114.ngrok.io/';
 
   const handleRecognizedWord = (word) => {
     setRecognizedText(prevText => {
@@ -91,10 +92,12 @@ const RecognizerPage = () => {
             <View
               style={{
                 flex: 1,
-                height: 200,
+                height: 250,
                 alignSelf: 'flex-end',
                 alignItems: 'center',
-                backgroundColor: 'white'
+                backgroundColor: 'white',
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20
               }}
             >
               <View
@@ -102,33 +105,76 @@ const RecognizerPage = () => {
                   flex: 1,
                   width: Dimensions.get('window').width,
                   alignSelf: 'flex-end',
-                  alignItems: 'center',
+                  alignItems: 'center'
                 }}
               >
-                <Text
+                <TouchableOpacity
                   style={{
-                    marginVertical: 32,
-                    fontSize: 32
+                    paddingVertical: 18
                   }}
+                  onPress={() => {setRecognizedText([])}}
                 >
-                  {recognizedText.join('')}
-                </Text>
+                  <Text
+                    style={{
+                      margin: 18,
+                      fontFamily: 'Bold',
+                      textAlign: 'center',
+                      color: 'gray'
+                    }}
+                  >
+                    { recognizedText.length > 0 ? 'Hasil Terjemahan' : ''}
+                  </Text>
+                  <Text
+                    style={{
+                      marginBottom: 32,
+                      textAlign: 'center',
+                      fontSize: recognizedText.length > 0 ? 32 : 18,
+                      fontFamily: 'Bold',
+                      color: recognizedText.length > 0 ? 'black' : 'gray'
+                    }}
+                  >
+                    {
+                      recognizedText.length > 0 ?
+                        recognizedText.join('') :
+                        "Tekan 'Rekam' untuk mulai"
+                    }
+                  </Text>
+                </TouchableOpacity>
                 <View
                   style={{
-                    flexDirection: 'row'
+                    flexDirection: 'row',
+                    flex: 1,
+                    width: Dimensions.get('window').width,
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   <TouchableOpacity
                     onPress={() => {setRecording(!!!recording)}}
                   >
-                    {
-                      recording ? <Text style={{ fontSize: 18, marginBottom: 10, color: 'red' }}>
-                        Stop Recording
-                      </Text> : <Text style={{ fontSize: 18, marginBottom: 10, color: 'black' }}>
-                        Start Recording
-                      </Text>
-                    }
+                    <View
+                      style={{
+                        height: 70,
+                        width: 70,
+                        backgroundColor: 'red',
+                        borderRadius: 35,
+                        borderWidth: `${ recording ? 5 : 20 }`,
+                        borderColor: 'white',
+                        shadowColor: "#000",
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.22,
+                        shadowRadius: 2.22,
+                      }}
+                    />
                   </TouchableOpacity>
+                  <View
+                    style={{
+                      width: 30
+                    }}
+                  />
                   <TouchableOpacity
                     onPress={() => {
                       setType(
@@ -138,7 +184,23 @@ const RecognizerPage = () => {
                       );
                     }}
                   >
-                    <Text style={{ fontSize: 18, marginBottom: 10, color: 'black' }}> Flip </Text>
+                    <View
+                      style={{
+                        height: 40,
+                        width: 40,
+                        backgroundColor: 'white',
+                        borderRadius: 20,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.22,
+                        shadowRadius: 2.22,
+                      }}
+                    >
+                      <IconFlip/>
+                    </View>
                   </TouchableOpacity>
                 </View>
               </View>

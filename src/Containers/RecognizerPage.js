@@ -12,12 +12,21 @@ const RecognizerPage = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [recording, setRecording] = useState(false);
-  const [recognizedText, setRecognizedText] = useState('');
-  const [imageUri, setImageUri] = useState('');
+  const [recognizedText, setRecognizedText] = useState([]);
 
   const cameraRef = useRef(null);
 
-  const service = 'http://3ff1-35-196-215-233.ngrok.io/';
+  const service = 'http://df84-35-188-243-114.ngrok.io/';
+
+  const handleRecognizedWord = (word) => {
+    setRecognizedText(prevText => {
+      if (prevText[prevText.length - 1] !== word){
+        return [...prevText, word]
+      } else {
+        return prevText
+      }
+    });
+  }
 
   useEffect(() => {
     (async () => {
@@ -34,7 +43,6 @@ const RecognizerPage = () => {
         return;
       }
       const photo = await cameraRef.current.takePictureAsync({quality: 0.5, exif: false});
-      setImageUri(photo.uri);
 
       let formData = new FormData();
       formData.append('file', {
@@ -46,36 +54,21 @@ const RecognizerPage = () => {
       const result = await axios.post(`${service}predict`, formData); //do API call here
       console.log('==============')
       console.log('prediction result:', result.data);
-      console.log(photo.uri);
+
+      handleRecognizedWord(result.data);
     }, 5000);
     return () => clearInterval(interval);
   }, [recording]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if(recording === true){
-  //       const photo = await cameraRef.current.takePictureAsync({quality: 0.5, exif: false});
-
-  //       let formData = new FormData();
-  //       formData.append('file', { uri: photo.uri, name: 'image.jpg', type: 'image/jpg'})
-
-  //       setInterval(async () => {
-  //         const result = await axios.post(`${service}predict`, formData) //do API call here
-  //         console.log(result.data)
-  //         console.log(formData)
-  //       }, 5000);
-  //     }
-  //   }
-  //   fetchData();
-  // }, [recording]);
-
-
 
   if (hasPermission === null) {
     return <View />;
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
+  }
+
+  if (recording){
+    console.log("recognizedText:", recognizedText);
   }
 
   if (!fontsLoaded) {
@@ -118,7 +111,7 @@ const RecognizerPage = () => {
                     fontSize: 32
                   }}
                 >
-                  Lorem Ipsum
+                  {recognizedText.join('')}
                 </Text>
                 <View
                   style={{

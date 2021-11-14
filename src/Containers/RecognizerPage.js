@@ -17,7 +17,7 @@ const RecognizerPage = () => {
 
   const cameraRef = useRef(null);
 
-  const service = 'http://2cfc-35-188-243-114.ngrok.io/';
+  const service = 'http://3122-35-188-243-114.ngrok.io/';
 
   const handleRecognizedWord = (word) => {
     setRecognizedText(prevText => {

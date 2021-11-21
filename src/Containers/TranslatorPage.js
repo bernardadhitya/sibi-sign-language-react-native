@@ -8,7 +8,7 @@ import { images } from '../Constants/Images';
 
 const TranslatorPage = () => {
   let [fontsLoaded] = useFonts(Fonts);
-  const [text, setText] = React.useState("TEST");
+  const [text, setText] = React.useState("");
 
   const renderTranslationCards = () => {
     return text.split('').map(letter => {
@@ -28,6 +28,7 @@ const TranslatorPage = () => {
             },
             shadowOpacity: 0.22,
             shadowRadius: 2.22,
+            elevation: 3,
             alignItems: 'center',
             justifyContent: 'center'
           }}
@@ -101,7 +102,8 @@ const TranslatorPage = () => {
                   height: 1,
                 },
                 shadowOpacity: 0.22,
-                shadowRadius: 2.22
+                shadowRadius: 2.22,
+                elevation: 3
               }}
               onChangeText={setText}
               value={text}

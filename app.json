@@ -5,7 +5,13 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.app.sibisignlanguagereactnative"
+    },
+    "splash": {
+      "image": "./src/Assets/splashscreen/splashscreen.png"
+    }
   },
   "name": "sibi-sign-language-react-native"
 }

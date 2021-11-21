@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native';
 import { Camera } from 'expo-camera';
 import axios from 'axios';
 import IconFlip from '../Assets/icons/IconFlip';
+import { getUrl } from '../Constants/Connection';
 
 const RecognizerPage = () => {
   let [fontsLoaded] = useFonts(Fonts);
@@ -14,10 +15,9 @@ const RecognizerPage = () => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [recording, setRecording] = useState(false);
   const [recognizedText, setRecognizedText] = useState([]);
+  const [service, setService] = useState('');
 
   const cameraRef = useRef(null);
-
-  const service = 'http://3122-35-188-243-114.ngrok.io/';
 
   const handleRecognizedWord = (word) => {
     setRecognizedText(prevText => {
@@ -33,6 +33,8 @@ const RecognizerPage = () => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
+      const link = await getUrl();
+      setService(link);
     })();
   }, []);
 
@@ -158,7 +160,7 @@ const RecognizerPage = () => {
                         width: 70,
                         backgroundColor: 'red',
                         borderRadius: 35,
-                        borderWidth: `${ recording ? 5 : 20 }`,
+                        borderWidth: recording ? 5 : 20,
                         borderColor: 'white',
                         shadowColor: "#000",
                         shadowOffset: {
@@ -167,6 +169,7 @@ const RecognizerPage = () => {
                         },
                         shadowOpacity: 0.22,
                         shadowRadius: 2.22,
+                        elevation: 3
                       }}
                     />
                   </TouchableOpacity>
@@ -197,6 +200,7 @@ const RecognizerPage = () => {
                         },
                         shadowOpacity: 0.22,
                         shadowRadius: 2.22,
+                        elevation: 3
                       }}
                     >
                       <IconFlip/>

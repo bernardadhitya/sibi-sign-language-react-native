@@ -4,29 +4,20 @@ import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import RecognizerPage from './src/Containers/RecognizerPage';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import TranslatorPage from './src/Containers/TranslatorPage';
+import { NavigationContainer } from '@react-navigation/native';
 
-const renderScene = SceneMap({
-  first: RecognizerPage,
-  second: TranslatorPage,
-});
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const layout = useWindowDimensions();
-
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
-  ]);
-
   return (
-    <TabView
-      renderTabBar={() => null}
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-    />
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Recognizer" component={RecognizerPage} />
+        <Tab.Screen name="Translator" component={TranslatorPage} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 

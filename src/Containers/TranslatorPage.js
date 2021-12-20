@@ -11,10 +11,11 @@ const TranslatorPage = () => {
   const [text, setText] = React.useState("");
 
   const renderTranslationCards = () => {
-    return text.split('').map(letter => {
+    return text.split('').map((letter, idx) => {
       const imageUrl = images[letter.toUpperCase()];
       return (
         <View
+          key={idx}
           style={{
             width: 200,
             height: 200,

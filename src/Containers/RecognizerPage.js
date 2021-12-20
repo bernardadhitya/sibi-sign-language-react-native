@@ -8,6 +8,7 @@ import { Camera } from 'expo-camera';
 import axios from 'axios';
 import IconFlip from '../Assets/icons/IconFlip';
 import { getUrl } from '../Constants/Connection';
+import { useIsFocused } from '@react-navigation/native';
 
 const RecognizerPage = () => {
   let [fontsLoaded] = useFonts(Fonts);
@@ -18,6 +19,7 @@ const RecognizerPage = () => {
   const [service, setService] = useState('');
 
   const cameraRef = useRef(null);
+  const isFocused = useIsFocused();
 
   const handleRecognizedWord = (word) => {
     setRecognizedText(prevText => {
@@ -74,6 +76,143 @@ const RecognizerPage = () => {
     console.log("recognizedText:", recognizedText);
   }
 
+  const renderContent = () => {
+    return (
+      <View
+        style={{
+          width: Dimensions.get('window').width,
+          flex: 1,
+          backgroundColor: 'transparent',
+          flexDirection: 'row',
+        }}>
+        <View
+          style={{
+            flex: 1,
+            height: 250,
+            alignSelf: 'flex-end',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              width: Dimensions.get('window').width,
+              alignSelf: 'flex-end',
+              alignItems: 'center'
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                paddingVertical: 18
+              }}
+              onPress={() => {setRecognizedText([])}}
+            >
+              <Text
+                style={{
+                  margin: 18,
+                  fontFamily: 'Bold',
+                  textAlign: 'center',
+                  color: 'gray'
+                }}
+              >
+                { recognizedText.length > 0 ? 'Hasil Terjemahan' : ''}
+              </Text>
+              <Text
+                style={{
+                  marginBottom: 32,
+                  textAlign: 'center',
+                  fontSize: recognizedText.length > 0 ? 32 : 18,
+                  fontFamily: 'Bold',
+                  color: recognizedText.length > 0 ? 'black' : 'gray'
+                }}
+              >
+                {
+                  recognizedText.length > 0 ?
+                    recognizedText.join('') :
+                    "Tekan 'Rekam' untuk mulai"
+                }
+              </Text>
+            </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                width: Dimensions.get('window').width,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {setRecording(!!!recording)}}
+              >
+                <View
+                  style={{
+                    height: 70,
+                    width: 70,
+                    backgroundColor: 'red',
+                    borderRadius: 35,
+                    borderWidth: recording ? 5 : 20,
+                    borderColor: 'white',
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.22,
+                    shadowRadius: 2.22,
+                    elevation: 3
+                  }}
+                />
+              </TouchableOpacity>
+              <View
+                style={{
+                  width: 30
+                }}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  setType(
+                    type === Camera.Constants.Type.back
+                      ? Camera.Constants.Type.front
+                      : Camera.Constants.Type.back
+                  );
+                }}
+              >
+                <View
+                  style={{
+                    height: 40,
+                    width: 40,
+                    backgroundColor: 'white',
+                    borderRadius: 20,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.22,
+                    shadowRadius: 2.22,
+                    elevation: 3
+                  }}
+                >
+                  <IconFlip/>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
+    )
+  }
+
+  const renderCamera = () => {
+    return isFocused ? <Camera style={{ flex: 1 }} type={type} ref={cameraRef}>
+      {renderContent()}
+    </Camera> : renderContent()
+  }
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
@@ -83,134 +222,7 @@ const RecognizerPage = () => {
           flex: 1,
         }}
       >
-        <Camera style={{ flex: 1 }} type={type} ref={cameraRef}>
-          <View
-            style={{
-              width: Dimensions.get('window').width,
-              flex: 1,
-              backgroundColor: 'transparent',
-              flexDirection: 'row',
-            }}>
-            <View
-              style={{
-                flex: 1,
-                height: 250,
-                alignSelf: 'flex-end',
-                alignItems: 'center',
-                backgroundColor: 'white',
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20
-              }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  width: Dimensions.get('window').width,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center'
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 18
-                  }}
-                  onPress={() => {setRecognizedText([])}}
-                >
-                  <Text
-                    style={{
-                      margin: 18,
-                      fontFamily: 'Bold',
-                      textAlign: 'center',
-                      color: 'gray'
-                    }}
-                  >
-                    { recognizedText.length > 0 ? 'Hasil Terjemahan' : ''}
-                  </Text>
-                  <Text
-                    style={{
-                      marginBottom: 32,
-                      textAlign: 'center',
-                      fontSize: recognizedText.length > 0 ? 32 : 18,
-                      fontFamily: 'Bold',
-                      color: recognizedText.length > 0 ? 'black' : 'gray'
-                    }}
-                  >
-                    {
-                      recognizedText.length > 0 ?
-                        recognizedText.join('') :
-                        "Tekan 'Rekam' untuk mulai"
-                    }
-                  </Text>
-                </TouchableOpacity>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flex: 1,
-                    width: Dimensions.get('window').width,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <TouchableOpacity
-                    onPress={() => {setRecording(!!!recording)}}
-                  >
-                    <View
-                      style={{
-                        height: 70,
-                        width: 70,
-                        backgroundColor: 'red',
-                        borderRadius: 35,
-                        borderWidth: recording ? 5 : 20,
-                        borderColor: 'white',
-                        shadowColor: "#000",
-                        shadowOffset: {
-                          width: 0,
-                          height: 1,
-                        },
-                        shadowOpacity: 0.22,
-                        shadowRadius: 2.22,
-                        elevation: 3
-                      }}
-                    />
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      width: 30
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={() => {
-                      setType(
-                        type === Camera.Constants.Type.back
-                          ? Camera.Constants.Type.front
-                          : Camera.Constants.Type.back
-                      );
-                    }}
-                  >
-                    <View
-                      style={{
-                        height: 40,
-                        width: 40,
-                        backgroundColor: 'white',
-                        borderRadius: 20,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                          width: 0,
-                          height: 1,
-                        },
-                        shadowOpacity: 0.22,
-                        shadowRadius: 2.22,
-                        elevation: 3
-                      }}
-                    >
-                      <IconFlip/>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Camera>
+        {renderCamera()}
       </SafeAreaView>
     )
   }

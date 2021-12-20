@@ -18,7 +18,7 @@ const TranslatorPage = () => {
           key={idx}
           style={{
             width: 200,
-            height: 200,
+            height: 220,
             margin: 20,
             borderRadius: 10,
             backgroundColor: 'white',
@@ -36,8 +36,8 @@ const TranslatorPage = () => {
         >
           <Image
             style={{
-              width: 100,
-              height: 100,
+              width: 150,
+              height: 150,
               resizeMode: 'stretch',
               marginBottom: 18
             }}

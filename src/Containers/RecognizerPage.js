@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, SafeAreaView, View, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, SafeAreaView, View, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { Fonts } from '../Constants/Fonts';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@use-expo/font';
-import { ScrollView } from 'react-native';
 import { Camera } from 'expo-camera';
 import axios from 'axios';
 import IconFlip from '../Assets/icons/IconFlip';
@@ -15,7 +14,7 @@ const RecognizerPage = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [recording, setRecording] = useState(false);
-  const [recognizedText, setRecognizedText] = useState([]);
+  const [recognizedText, setRecognizedText] = useState(['T','E','S','T']);
   const [service, setService] = useState('');
 
   const cameraRef = useRef(null);
@@ -120,22 +119,43 @@ const RecognizerPage = () => {
               >
                 { recognizedText.length > 0 ? 'Hasil Terjemahan' : ''}
               </Text>
-              <Text
+              <View
                 style={{
-                  marginBottom: 32,
-                  textAlign: 'center',
-                  fontSize: recognizedText.length > 0 ? 32 : 18,
-                  fontFamily: 'Bold',
-                  color: recognizedText.length > 0 ? 'black' : 'gray'
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
+                <Text
+                  style={{
+                    marginBottom: 32,
+                    textAlign: 'center',
+                    fontSize: recognizedText.length > 0 ? 32 : 18,
+                    fontFamily: 'Bold',
+                    color: recognizedText.length > 0 ? 'black' : 'gray'
+                  }}
+                >
+                  {
+                    recognizedText.length > 0 ?
+                      recognizedText.join('') :
+                      "Tekan 'Rekam' untuk mulai"
+                  }
+                </Text>
                 {
-                  recognizedText.length > 0 ?
-                    recognizedText.join('') :
-                    "Tekan 'Rekam' untuk mulai"
+                  recognizedText.length > 0 ? <Image
+                    style={{
+                      width: 24,
+                      height: 20,
+                      marginLeft: 8,
+                      marginBottom: 32,
+                      resizeMode: 'stretch',
+                    }}
+                    source={require('../Assets/images/ImageBackspace.png')}
+                  /> : <></>
                 }
-              </Text>
+              </View>
             </TouchableOpacity>
+            
             <View
               style={{
                 flexDirection: 'row',

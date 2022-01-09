@@ -14,7 +14,7 @@ const RecognizerPage = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [recording, setRecording] = useState(false);
-  const [recognizedText, setRecognizedText] = useState(['T','E','S','T']);
+  const [recognizedText, setRecognizedText] = useState([]);
   const [service, setService] = useState('');
 
   const cameraRef = useRef(null);
@@ -107,7 +107,7 @@ const RecognizerPage = () => {
               style={{
                 paddingVertical: 18
               }}
-              onPress={() => {setRecognizedText([])}}
+              onPress={() => {setRecognizedText(recognizedText.slice(0, -1))}}
             >
               <Text
                 style={{

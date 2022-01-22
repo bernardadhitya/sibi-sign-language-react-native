@@ -102,11 +102,18 @@ const TranslatorPage = () => {
   
   useEffect(() => {
     const intervalID = setTimeout(() =>  {
-      setCounterPlayed(counterPlayed+1)
+      console.log('==============');
+      console.log('currently playing... counter at ' + counterPlayed);
+      console.log('length of text:', text.length);
+      if (counterPlayed >= text.length-1) {
+        setPlaying(false);
+      } else {
+        setCounterPlayed(counterPlayed+1)
+      }
     }, 2000);
 
     return () => clearInterval(intervalID);
-  }, [counterPlayed]);
+  }, [counterPlayed, playing]);
 
   const renderTranslationSlider = () => {
     return (

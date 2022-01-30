@@ -1,8 +1,8 @@
 # SIBI Sign Language Recognizer
-
 ### 💡 About the App
 This app is built to help people communicate with people with hearing disabilities in Indonesia, by using SIBI, an Indonesian standardized sign language system. The way it works is by constantly converting pictures taken by the app into alphabets, based on SIBI. This way, we can understand what the deaf people are trying to say through their gestures. We can also translate the a word to series of gesture slideshow in the app through its translation feature. This helps us make a reply, and practice sign language in the process
 
+![Preview](src/Assets/screenshots/sibi-sign-language-react-native-header.png)
 ### 👀 Preview
 
 ###### Recognizer Interface
